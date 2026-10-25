@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Address Management | QA Test Plan</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202a35;
+      --muted: #596776;
+      --line: #d8dee5;
+      --paper: #ffffff;
+      --canvas: #edf1f3;
+      --teal: #087e78;
+      --teal-pale: #e5f4f1;
+      --amber: #8b5b00;
+      --amber-pale: #fff3d8;
+      --red: #a52c36;
+      --red-pale: #fbe9e9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 15px/1.55 "Segoe UI", Tahoma, sans-serif;
+    }
+    main {
+      width: min(100%, 1050px);
+      margin: 32px auto;
+      padding: 48px 58px;
+      background: var(--paper);
+      box-shadow: 0 8px 28px #24374618;
+    }
+    header { border-bottom: 3px solid var(--teal); padding-bottom: 24px; margin-bottom: 28px; }
+    .eyebrow { color: var(--teal); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+    h1 { font-size: 34px; line-height: 1.15; margin: 8px 0 12px; }
+    h2 { font-size: 21px; margin: 34px 0 12px; padding-bottom: 7px; border-bottom: 1px solid var(--line); }
+    h3 { font-size: 16px; margin: 20px 0 8px; }
+    p { margin: 8px 0 12px; }
+    .subtitle { color: var(--muted); font-size: 17px; max-width: 760px; }
+    .meta { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 18px; color: var(--muted); font-size: 13px; }
+    .notice { border-left: 4px solid var(--amber); background: var(--amber-pale); padding: 12px 16px; margin: 22px 0; }
+    .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0; }
+    .metric { border-top: 3px solid var(--teal); background: #f4f8f8; padding: 12px 14px; }
+    .metric strong { display: block; font-size: 13px; color: var(--muted); text-transform: uppercase; }
+    .metric span { font-size: 17px; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 13px; }
+    th, td { border: 1px solid var(--line); padding: 9px 10px; text-align: left; vertical-align: top; }
+    th { background: #edf4f3; font-weight: 700; }
+    .priority { white-space: nowrap; font-weight: 700; }
+    .p0 { color: var(--red); }
+    .p1 { color: #9a5700; }
+    .p2 { color: #285c75; }
+    .tag { display: inline-block; padding: 2px 7px; background: var(--teal-pale); color: #075e59; font-size: 12px; font-weight: 700; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 4px 0; }
+    .small { color: var(--muted); font-size: 13px; }
+    footer { border-top: 1px solid var(--line); margin-top: 36px; padding-top: 12px; color: var(--muted); font-size: 12px; }
+    @media (max-width: 700px) {
+      main { margin: 0; padding: 28px 20px; }
+      h1 { font-size: 28px; }
+      .summary { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      body { background: white; font-size: 11pt; }
+      main { width: auto; margin: 0; padding: 0; box-shadow: none; }
+      h2 { break-after: avoid; }
+      table, .notice, .metric { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Quality Engineering · Test Strategy</div>
+    <h1>Customer Address Management</h1>
+    <p class="subtitle">Risk-based test plan for saving, viewing, editing, deleting, and selecting customer delivery addresses.</p>
+    <div class="meta">
+      <span><strong>Version:</strong> 1.0</span>
+      <span><strong>Date:</strong> 2026-10-18</span>
+      <span><strong>Status:</strong> Draft pending requirement confirmation</span>
+      <span><strong>Source:</strong> Acceptance criteria in the supplied Test Plan Generator skill example</span>
+    </div>
+  </header>
+
+  <div class="notice"><strong>Scope note:</strong> No product-specific requirement brief was supplied. The four criteria below are taken from the example in the attached skill and are treated as the planning baseline, not independently confirmed product requirements. Unspecified behavior is recorded as an assumption or clarification question.</div>
+
+  <div class="summary">
+    <div class="metric"><strong>Planning baseline</strong><span>4 example criteria</span></div>
+    <div class="metric"><strong>Highest risk</strong><span>Cross-customer access</span></div>
+    <div class="metric"><strong>Release emphasis</strong><span>Authorization + persistence</span></div>
+  </div>
+
+  <section>
+    <h2>1. Feature Overview and Business Objective</h2>
+    <p><strong>Feature:</strong> Customer Address Management.</p>
+    <p><strong>Business hypothesis:</strong> Allowing customers to save and manage delivery addresses can reduce checkout friction and delivery errors.</p>
+    <p><strong>Intended capability:</strong> An authenticated customer can manage their own addresses, designate a default address, and use address data in relevant delivery flows. The checkout integration is a test consideration inferred from the stated business objective and must be confirmed before it is treated as an acceptance requirement.</p>
+  </section>
+
+  <section>
+    <h2>2. Testing Objectives</h2>
+    <ul>
+      <li>Verify supported address lifecycle operations and persistence across reloads and sessions.</li>
+      <li>Verify invalid address details are rejected with useful, accessible validation feedback.</li>
+      <li>Verify default-address behavior is consistent and cannot leave ambiguous or unintended defaults.</li>
+      <li>Prove customers can access and mutate only their own address records.</li>
+      <li>Assess service and checkout integration behavior, including error handling and data consistency.</li>
+      <li>Identify high-value repeatable regression checks and preserve traceability to the baseline criteria.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. Scope and Out of Scope</h2>
+    <h3>In scope</h3>
+    <ul>
+      <li>Create, view/list, edit, and delete customer addresses.</li>
+      <li>Set and retrieve a default address; verify transitions between defaults.</li>
+      <li>Required-field and invalid-input validation, error states, persistence, and duplicate submissions.</li>
+      <li>Authentication, authorization, tenant/customer data isolation, and privacy-safe handling.</li>
+      <li>API/service behavior, UI behavior, and the address-to-checkout handoff where supported.</li>
+    </ul>
+    <h3>Out of scope pending confirmation</h3>
+    <ul>
+      <li>Address autocomplete, geocoding, postal-service verification, and internationalization rules.</li>
+      <li>Delivery-zone eligibility, tax calculation, payment, and carrier fulfillment behavior beyond the address handoff.</li>
+      <li>Migration/backfill of legacy address records and operational load targets.</li>
+      <li>Specific address field formats, limits, and default-address rules not included in the baseline criteria.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4. Requirements and Acceptance Criteria</h2>
+    <p class="small">IDs are assigned here for traceability; they are not source-system requirement IDs.</p>
+    <table>
+      <thead><tr><th>ID</th><th>Baseline acceptance criterion</th><th>Planned verification</th></tr></thead>
+      <tbody>
+        <tr><td>AC-01</td><td>Customers can add, view, edit, and delete addresses.</td><td>CRUD workflows, validation, persistence, error recovery, and applicable UI/API behavior.</td></tr>
+        <tr><td>AC-02</td><td>Customers can set a default address.</td><td>Set, retrieve, change, and verify default selection in address list and dependent flow.</td></tr>
+        <tr><td>AC-03</td><td>Invalid address details must be rejected.</td><td>Required, malformed, boundary, and unsupported values once validation rules are confirmed.</td></tr>
+        <tr><td>AC-04</td><td>Customers cannot access another customer's addresses.</td><td>Cross-customer read/write/delete attempts, including direct API identifier manipulation.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>5. Test Types and Coverage Areas</h2>
+    <table>
+      <thead><tr><th>Test type</th><th>Coverage</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>Functional</td><td>Address CRUD, list/detail display, default selection, validation, success and failure feedback.</td><td>P1</td></tr>
+        <tr><td>Negative and boundary</td><td>Missing/invalid fields; length and character boundaries after rules are specified; empty list; duplicate submit; stale edits.</td><td>P1–P2</td></tr>
+        <tr><td>API / service</td><td>Request validation, response codes/schema, persistence, ownership checks, concurrency and idempotency behavior where defined.</td><td>P1</td></tr>
+        <tr><td>Security and privacy</td><td>Authentication required; object-level authorization; cross-customer IDOR; mass assignment; sensitive data in logs/errors.</td><td>P0–P1</td></tr>
+        <tr><td>Integration</td><td>Address selected for checkout is the intended saved address; changes/deletion are reflected or handled safely downstream.</td><td>P1</td></tr>
+        <tr><td>End-to-end</td><td>Customer manages an address and completes the address-selection portion of checkout.</td><td>P1</td></tr>
+        <tr><td>Accessibility / usability</td><td>Labels, keyboard operation, focus/error announcements, understandable validation, responsive layout.</td><td>P2</td></tr>
+        <tr><td>Reliability</td><td>Transient service failure, retry behavior, duplicate requests, and concurrent updates where supported.</td><td>P2</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>6. Risk Assessment and Priorities</h2>
+    <p><strong>Priority scale:</strong> P0 = release blocker / severe security or data-integrity impact; P1 = high business impact or likely critical workflow failure; P2 = moderate impact or narrower edge case; P3 = low impact, cosmetic, or deferred. Risk ratings below are preliminary because likelihood data and architecture are unavailable.</p>
+    <table>
+      <thead><tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Priority</th><th>Mitigation / focus</th></tr></thead>
+      <tbody>
+        <tr><td>Customer reads or changes another customer's address</td><td>Critical privacy and trust breach</td><td>Medium until controls are verified</td><td class="priority p0">P0</td><td>Negative API/UI authorization tests for every object operation; use separate synthetic customer identities.</td></tr>
+        <tr><td>Address data is lost, corrupted, or not saved</td><td>High checkout and delivery impact</td><td>Medium</td><td class="priority p1">P1</td><td>Persistence checks after reload, session change, update, and service errors.</td></tr>
+        <tr><td>Incorrect default address is selected</td><td>High misdelivery / checkout friction</td><td>Medium</td><td class="priority p1">P1</td><td>Verify default transitions, retrieval, and checkout handoff; clarify zero/multiple-default rules.</td></tr>
+        <tr><td>Invalid or ambiguous address accepted</td><td>Moderate to high delivery failure</td><td>Medium</td><td class="priority p1">P1</td><td>Test confirmed validation rules and boundary values; avoid assuming unsupported country-specific rules.</td></tr>
+        <tr><td>Checkout consumes stale or deleted address</td><td>High user-visible failure</td><td>Low/unknown</td><td class="priority p1">P1</td><td>Integration tests for selection, edit, deletion, and refresh behavior.</td></tr>
+        <tr><td>Concurrent requests produce duplicate or conflicting records</td><td>Moderate data quality impact</td><td>Low/unknown</td><td class="priority p2">P2</td><td>Exercise duplicate submits and concurrent default changes after expected behavior is defined.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>7. Test Data Requirements</h2>
+    <ul>
+      <li>Two or more synthetic customer accounts (A and B), each with distinct address records and no shared personal data.</li>
+      <li>Valid address data approved for the supported market(s), plus invalid/missing-field variants based on confirmed validation rules.</li>
+      <li>Records covering no saved addresses, one address, multiple addresses, and each supported default state.</li>
+      <li>Identifiers for owned and non-owned records to probe object-level authorization through UI and API routes.</li>
+      <li>Use synthetic names and contact details only. Do not use production customer data, real credentials, or secrets.</li>
+      <li>Define cleanup or isolated fixtures so tests do not depend on execution order or mutate shared data.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>8. Environment and Dependencies</h2>
+    <ul>
+      <li>Test environment with representative application, address service/API, persistence layer, and authentication/authorization configuration.</li>
+      <li>At least two test identities with separate ownership and ability to inspect requests/responses safely.</li>
+      <li>Checkout or a stable test double for validating address selection integration.</li>
+      <li>Controlled service-error capability for testing timeout, server error, and retry handling, if supported by the environment.</li>
+      <li>Supported browser/device matrix, deployment version, and test environment data-reset procedure to be confirmed.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>9. Entry and Exit Criteria</h2>
+    <h3>Entry</h3>
+    <ul>
+      <li>Acceptance criteria and field validation rules are reviewed; unresolved behaviors are explicitly marked.</li>
+      <li>Build is deployed to a stable test environment and address APIs/UI are reachable.</li>
+      <li>Synthetic accounts, test data, and required dependencies are available.</li>
+      <li>Authorization model and supported checkout handoff are documented sufficiently to define expected outcomes.</li>
+    </ul>
+    <h3>Exit</h3>
+    <ul>
+      <li>All confirmed acceptance criteria have mapped test coverage and P0/P1 tests pass.</li>
+      <li>No open P0 defects; P1 defects are resolved or have explicit product and release-owner disposition.</li>
+      <li>Cross-customer access checks pass for read and all applicable mutation operations.</li>
+      <li>Regression suite passes; failures, exclusions, environment limitations, and residual risks are reported.</li>
+      <li>Coverage gaps caused by unanswered questions are documented and accepted by the product owner.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>10. Automation Candidates and Recommended Testing Layers</h2>
+    <table>
+      <thead><tr><th>Candidate</th><th>Recommended layer</th><th>Automation</th></tr></thead>
+      <tbody>
+        <tr><td>CRUD, validation, response contracts, persistence</td><td>API/service</td><td>High; fast, deterministic checks for core rules and failures.</td></tr>
+        <tr><td>Object ownership and cross-customer access</td><td>API/service, plus focused UI check</td><td>High; run on every relevant change and release candidate.</td></tr>
+        <tr><td>Default-address transitions and retrieval</td><td>API/service; UI smoke for visible behavior</td><td>High for rules, selective UI coverage for rendering and selection.</td></tr>
+        <tr><td>Checkout address handoff</td><td>Integration and a small E2E flow</td><td>Conditional; automate once downstream test environment is stable.</td></tr>
+        <tr><td>Accessibility, responsive behavior, and usability</td><td>UI/manual plus suitable automated audits</td><td>Partial; automated checks supplement, not replace, human review.</td></tr>
+        <tr><td>Concurrency and transient failure recovery</td><td>API/integration</td><td>Conditional on defined semantics and reliable fault-injection support.</td></tr>
+      </tbody>
+    </table>
+    <p>Keep most validation and authorization checks below the UI layer. Maintain a small number of end-to-end paths for confidence in the customer workflow; avoid duplicating every API case through the browser.</p>
+  </section>
+
+  <section>
+    <h2>11. Regression Testing Strategy</h2>
+    <ul>
+      <li><span class="tag">Every change</span> Run focused API/service tests for CRUD, validation, default selection, and ownership enforcement.</li>
+      <li><span class="tag">Pre-release</span> Run UI smoke for add/edit/delete/default selection, plus the checkout address handoff.</li>
+      <li><span class="tag">Security gate</span> Re-run cross-customer read and mutation attempts after authorization, routing, or data-access changes.</li>
+      <li><span class="tag">Broader regression</span> Verify checkout still uses the intended address and that account/profile navigation is unaffected.</li>
+      <li>After a defect fix, add a regression case at the lowest reliable layer and retain an end-to-end check when user-visible integration was affected.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>12. Assumptions, Open Questions, and Coverage Gaps</h2>
+    <h3>Assumptions to validate</h3>
+    <ul>
+      <li>The example criteria in the supplied skill are the intended feature baseline for this plan.</li>
+      <li>Address management requires an authenticated customer context; authentication method is unspecified.</li>
+      <li>Address data may be used by checkout, based on the business hypothesis; exact integration behavior is unconfirmed.</li>
+      <li>“Invalid address details” means validation against product-defined rules; the rules themselves are not supplied.</li>
+    </ul>
+    <h3>Open questions</h3>
+    <ul>
+      <li>Which address fields are required, what are their length/format limits, and which countries/regions are supported?</li>
+      <li>Is an address validated syntactically only, or verified against an external address/geocoding provider?</li>
+      <li>Must each customer always have exactly one default address, or can there be no default? What happens when the default is deleted?</li>
+      <li>Can customers save duplicate addresses? What is the expected behavior for repeated submissions and concurrent edits?</li>
+      <li>What should checkout do when a selected address is edited or deleted in another session?</li>
+      <li>What are the supported browser/device matrix, accessibility target, performance expectations, and availability/error-message requirements?</li>
+      <li>Are audit history, retention, export, or deletion/privacy obligations applicable to address data?</li>
+    </ul>
+    <p><strong>Coverage gaps:</strong> Country-specific validation, performance/load, external address-provider integration, data migration, and formal compliance testing cannot be fully specified until the relevant requirements and dependencies are identified.</p>
+  </section>
+
+  <footer>Prepared as a draft test strategy from the supplied skill example. Confirm product requirements and open questions before treating this plan as an approved release gate.</footer>
+</main>
+</body>
+</html>
